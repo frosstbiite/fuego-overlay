@@ -1,0 +1,89 @@
+{
+  "name": "fuego-overlay",
+  "productName": "Fuego Overlay",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Customizable iRacing broadcast overlays for drivers and streamers.",
+  "author": {
+    "name": "Fuego AutoSport",
+    "organization": "Fuego AutoSport"
+  },
+  "copyright": "Copyright © 2026 Fuego AutoSport",
+  "license": "UNLICENSED",
+  "main": "electron/main.cjs",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "telemetry": "tsx server/telemetry.ts",
+    "desktop": "wait-on http://127.0.0.1:5173 && electron .",
+    "start": "concurrently --kill-others \"npm:telemetry\" \"npm:dev\" \"npm:desktop\"",
+    "dev:all": "concurrently --kill-others \"npm:telemetry\" \"npm:dev\"",
+    "build:web": "tsc -b && vite build",
+    "build:telemetry": "esbuild server/telemetry.ts --bundle --platform=node --format=cjs --outfile=dist-server/telemetry.cjs --external:irsdk-node",
+    "build": "npm run build:web && npm run build:telemetry",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "irsdk-node": "^4.4.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "ws": "^8.21.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@types/ws": "^8.18.1",
+    "@vitejs/plugin-react": "^6.0.4",
+    "concurrently": "^10.0.5",
+    "electron": "latest",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.8.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^17.7.0",
+    "tsx": "^4.23.12",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.65.0",
+    "vite": "^8.2.0",
+    "wait-on": "^9.1.0"
+  },
+  "build": {
+    "appId": "com.fuegoautosport.fuegooverlay",
+    "productName": "Fuego Overlay",
+    "asar": true,
+    "npmRebuild": false,
+    "asarUnpack": [
+      "node_modules/@irsdk-node/native/**/*"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-server/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "nsis": {
+      "artifactName": "Fuego-Overlay-Setup-${version}.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Fuego Overlay",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "allowScripts": {
+    "@irsdk-node/native@5.4.0": true,
+    "esbuild@0.28.2": true,
+    "electron-winstaller@5.4.0": true
+  }
+}

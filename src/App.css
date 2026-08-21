@@ -1,0 +1,683 @@
+:root {
+  --blue: #1116a8;
+  --bright-blue: #2937ff;
+  --yellow: #fff200;
+  --white: #ffffff;
+  --dark: #20242a;
+  --darker: #15191f;
+  --muted: #3a4048;
+}
+
+/* Complete overlay area */
+.overlay-stage {
+  width: 1200px;
+  height: 180px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 4px;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* Main driver ticker */
+.driver-ticker {
+  --flag-color: #00e85a;
+  --flag-glow: rgba(0, 232, 90, 0.75);
+  --profile-primary: var(--bright-blue);
+  --profile-secondary: var(--blue);
+  --profile-trim: #2f8cff;
+  --profile-number: var(--yellow);
+  --profile-text: var(--white);
+
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 105px 155px 270px 175px 190px 285px;
+  width: 1180px;
+  height: 156px;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  color: var(--profile-text);
+  background:
+    linear-gradient(
+      105deg,
+      transparent 0%,
+      transparent 43%,
+      var(--profile-number) 43.2%,
+      var(--profile-number) 44.3%,
+      #101318 44.5%,
+      #101318 45.7%,
+      #f3f4f6 45.9%,
+      #f3f4f6 47%,
+      transparent 47.2%
+    ),
+    linear-gradient(
+      90deg,
+      var(--profile-secondary) 0%,
+      var(--profile-primary) 22%,
+      color-mix(in srgb, var(--profile-primary) 48%, #20242a) 41%,
+      var(--dark) 50%,
+      var(--darker) 100%
+    );
+
+  border: 4px solid var(--flag-color);
+  border-radius: 10px;
+
+  box-shadow:
+    0 12px 18px rgba(0, 0, 0, 0.65),
+    0 0 8px var(--flag-glow);
+
+  animation: none;
+  cursor: pointer;
+}
+
+/* Keep the actual ticker content above the flag sweep */
+.driver-ticker > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Flag-color border states */
+.driver-ticker.flag-green {
+  --flag-color: #00e85a;
+  --flag-glow: rgba(0, 232, 90, 0.75);
+}
+
+.driver-ticker.flag-yellow {
+  --flag-color: #ffe600;
+  --flag-glow: rgba(255, 230, 0, 0.85);
+}
+
+.driver-ticker.flag-white {
+  --flag-color: #ffffff;
+  --flag-glow: rgba(255, 255, 255, 0.8);
+}
+
+/* Animated flag sweep */
+.driver-ticker::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: -45%;
+  width: 38%;
+  pointer-events: none;
+
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    color-mix(in srgb, var(--flag-color) 20%, transparent) 28%,
+    color-mix(in srgb, var(--flag-color) 85%, transparent) 50%,
+    color-mix(in srgb, var(--flag-color) 20%, transparent) 72%,
+    transparent 100%
+  );
+
+  filter: blur(2px);
+  transform: skewX(-18deg);
+  animation: flag-sweep 850ms ease-out;
+}
+
+/* Position */
+.position {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 25px;
+  box-sizing: border-box;
+
+  background: linear-gradient(
+    105deg,
+    var(--profile-primary) 0%,
+    var(--profile-secondary) 82%,
+    transparent 83%
+  );
+}
+
+.position strong {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 55px;
+  font-style: italic;
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -2px;
+  text-shadow: 2px 3px 2px rgba(0, 0, 0, 0.65);
+}
+
+.position span {
+  margin-top: 3px;
+  margin-left: 3px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 19px;
+  font-style: italic;
+  line-height: 1;
+}
+
+/* Driver portrait */
+.portrait {
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.driver-portrait {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  max-width: none;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 4px 7px rgba(0, 0, 0, 0.8));
+}
+
+.driver-portrait-factory {
+  width: 145px;
+  height: auto;
+}
+
+.driver-portrait-custom {
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  transform: none;
+}
+
+/* Driver identity */
+.identity {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  min-width: 0;
+  padding: 7px 16px 6px 12px;
+  box-sizing: border-box;
+}
+
+.first-name {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  white-space: nowrap;
+
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 25px;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: 0.5px;
+}
+
+.nickname {
+  color: var(--profile-number);
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 17px;
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+
+.last-name {
+  margin-top: 5px;
+  white-space: nowrap;
+
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 40px;
+  font-style: italic;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.6px;
+  text-shadow: 2px 3px 2px rgba(0, 0, 0, 0.6);
+}
+
+.car-line {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: 9px;
+}
+
+.car-number {
+  color: var(--profile-number);
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 29px;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -1px;
+  -webkit-text-stroke: 1px #111111;
+  text-shadow:
+    2px 2px 0 #111111,
+    0 0 3px rgba(255, 242, 0, 0.75);
+  transform: skewX(-8deg);
+}
+
+.manufacturer {
+  padding: 3px 7px 2px;
+  color: var(--profile-secondary);
+  background: var(--profile-number);
+  border: 1px solid var(--white);
+
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 15px;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: 0.4px;
+}
+
+/* Shared telemetry layout */
+.telemetry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.telemetry-value {
+  margin-top: 3px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 40px;
+  font-style: italic;
+  line-height: 0.95;
+  text-shadow: 2px 3px 2px rgba(0, 0, 0, 0.7);
+}
+
+.telemetry-label {
+  margin-top: 7px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Live speed gauge */
+.gauge {
+  --speed-angle: 0deg;
+
+  position: relative;
+  width: 90px;
+  height: 48px;
+  overflow: hidden;
+}
+
+.gauge-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+
+  /* Fixed color zones: olive/yellow first, green near maximum speed. */
+  background: conic-gradient(
+    from 270deg,
+    #a8a51d 0deg 72deg,
+    var(--yellow) 72deg 125deg,
+    #54c936 125deg 180deg,
+    transparent 180deg 360deg
+  );
+
+  transition: filter 80ms linear;
+  filter: drop-shadow(0 0 4px rgba(255, 242, 0, 0.45));
+}
+
+/* Covers the portion of the arch above the current live speed. */
+.gauge-fill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 270deg,
+    transparent 0deg var(--speed-angle),
+    #3a3f47 var(--speed-angle) 180deg,
+    transparent 180deg 360deg
+  );
+}
+
+.gauge-fill::after {
+  content: '';
+  position: absolute;
+  inset: 13px;
+  border-radius: 50%;
+  background: var(--dark);
+}
+
+/* RPM bars */
+.rpm-bars {
+  height: 52px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+}
+
+.rpm-bars span {
+  display: block;
+  width: 11px;
+  opacity: 0.16;
+  background: var(--yellow);
+  transform-origin: bottom;
+
+  transition:
+    opacity 80ms linear,
+    background-color 80ms linear,
+    box-shadow 80ms linear,
+    transform 80ms linear;
+}
+
+.rpm-bars span:nth-child(1),
+.rpm-bars span:nth-child(8) {
+  height: 25px;
+}
+
+.rpm-bars span:nth-child(2),
+.rpm-bars span:nth-child(7) {
+  height: 34px;
+}
+
+.rpm-bars span:nth-child(3),
+.rpm-bars span:nth-child(6) {
+  height: 43px;
+}
+
+.rpm-bars span:nth-child(4),
+.rpm-bars span:nth-child(5) {
+  height: 51px;
+}
+
+.rpm-bars span.rpm-bar-active {
+  opacity: 1;
+  background: var(--yellow);
+  box-shadow:
+    0 0 6px rgba(255, 242, 0, 0.95),
+    0 0 13px rgba(255, 210, 0, 0.7);
+  transform: scaleY(1.04);
+}
+
+.rpm-bars span.rpm-bar-active.rpm-bar-redline {
+  background: #ff2a16;
+  box-shadow:
+    0 0 7px rgba(255, 42, 22, 1),
+    0 0 15px rgba(255, 42, 22, 0.8);
+  animation: redline-pulse 180ms ease-in-out infinite alternate;
+}
+
+/* Live track map */
+.right-panel {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+  background: rgba(14, 17, 21, 0.96);
+}
+
+.right-panel .track-map {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.right-panel.has-sponsor .track-map svg {
+  width: 135px;
+  height: 118px;
+}
+
+.track-map-hidden {
+  visibility: hidden;
+}
+
+.sponsor-logo-box {
+  display: flex;
+  flex: 0 0 142px;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  box-sizing: border-box;
+  background: linear-gradient(
+    145deg,
+    rgba(37, 43, 52, 0.96),
+    rgba(12, 15, 19, 0.98)
+  );
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.sponsor-logo-box img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 136px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.7));
+}
+
+.track-map {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-left: 2px solid rgba(255, 255, 255, 0.12);
+  background: radial-gradient(
+    circle at center,
+    rgba(48, 55, 65, 0.75),
+    rgba(14, 17, 21, 0.96) 72%
+  );
+}
+
+.track-map svg {
+  width: 235px;
+  height: 128px;
+  overflow: visible;
+  filter: drop-shadow(2px 4px 3px rgba(0, 0, 0, 0.7));
+}
+
+.track-outline {
+  fill: none;
+  stroke: #080a0d;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.track-centerline {
+  fill: none;
+  stroke: #b9c0c9;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.8));
+}
+
+.start-finish-line {
+  stroke: #ffffff;
+  stroke-width: 2;
+  stroke-dasharray: 2 2;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.9));
+}
+
+.track-car {
+  pointer-events: none;
+}
+
+.track-car circle {
+  fill: #f2f4f7;
+  stroke: #191d23;
+  stroke-width: 1;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.7));
+}
+
+.track-car-frost circle {
+  fill: var(--yellow);
+  stroke: #101318;
+  stroke-width: 1.4;
+  opacity: 1;
+  filter: drop-shadow(0 0 5px rgba(255, 242, 0, 1));
+}
+
+.track-car-frost text {
+  fill: #101318;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 9px;
+  font-style: italic;
+  font-weight: 900;
+  pointer-events: none;
+}
+
+/* Animations */
+@keyframes ticker-arrival {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes flag-sweep {
+  0% {
+    left: -45%;
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 0.9;
+  }
+
+  100% {
+    left: 115%;
+    opacity: 0;
+  }
+}
+
+@keyframes redline-pulse {
+  from {
+    filter: brightness(1);
+    transform: scaleY(1.04);
+  }
+
+  to {
+    filter: brightness(1.65);
+    transform: scaleY(1.1);
+  }
+} 
+/* Pre-race pacing state */
+.driver-ticker.flag-pacing {
+  --flag-color: var(--profile-trim);
+  --flag-glow: color-mix(in srgb, var(--profile-trim) 80%, transparent);
+}
+
+/* Checkered-flag state */
+.driver-ticker.flag-checkered {
+  --flag-color: #ffffff;
+  --flag-glow: rgba(255, 255, 255, 0.9);
+}
+
+/*
+ * Replace the normal single-color sweep with
+ * a black-and-white checkered sweep.
+ */
+.driver-ticker.flag-checkered::after {
+  background-color: white;
+
+  background-image:
+    linear-gradient(
+      45deg,
+      #111111 25%,
+      transparent 25%,
+      transparent 75%,
+      #111111 75%
+    ),
+    linear-gradient(
+      45deg,
+      #111111 25%,
+      #ffffff 25%,
+      #ffffff 75%,
+      #111111 75%
+    );
+
+  background-position:
+    0 0,
+    14px 14px;
+
+  background-size:
+    28px 28px;
+
+  -webkit-mask-image:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      black 20%,
+      black 80%,
+      transparent 100%
+    );
+
+  mask-image:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      black 20%,
+      black 80%,
+      transparent 100%
+    );
+
+  filter:
+    drop-shadow(
+      0 0 8px
+      rgba(255, 255, 255, 0.9)
+    );
+
+  animation:
+    flag-sweep
+    1100ms
+    ease-out;
+}
+
+.gauge strong {
+  position: absolute;
+  z-index: 4;
+
+  top: 5px;
+  bottom: auto;
+  left: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 29px;
+  height: 29px;
+
+  transform: translateX(-50%);
+
+  color: white;
+  background: #343941;
+
+  border:
+    2px
+    solid
+    rgba(255, 255, 255, 0.06);
+
+  border-radius: 50%;
+
+  box-sizing: border-box;
+
+  font-family:
+    Impact,
+    Haettenschweiler,
+    'Arial Narrow Bold',
+    sans-serif;
+
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1;
+
+  text-shadow:
+    1px 2px 2px
+    rgba(0, 0, 0, 0.8);
+
+  box-shadow:
+    0 3px 5px
+    rgba(0, 0, 0, 0.45);
+}
