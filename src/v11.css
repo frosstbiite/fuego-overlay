@@ -1,0 +1,126 @@
+/* Fuego Overlay v1.1 application navigation */
+.control-tabs {
+  overflow-x: auto;
+}
+
+.control-tabs button {
+  white-space: nowrap;
+}
+
+.tab-page,
+.settings-page {
+  padding: 14px;
+}
+
+.driver-profile-summary {
+  margin-bottom: 12px;
+}
+
+.coming-soon-page {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  min-height: 470px;
+  margin: 14px;
+  padding: 60px 30px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  background: radial-gradient(circle at top, rgba(16,95,220,.13), transparent 42%), #0d1117;
+}
+
+.coming-soon-page h2 {
+  margin: 8px 0 10px;
+  color: var(--control-white);
+  font-family: Impact, sans-serif;
+  font-size: 42px;
+  font-style: italic;
+  letter-spacing: 1.5px;
+}
+
+.coming-soon-page p {
+  max-width: 680px;
+  margin: 0 0 26px;
+  color: #aeb5bf;
+  line-height: 1.6;
+}
+
+.coming-soon-page strong,
+.coming-soon-kicker {
+  color: var(--control-yellow);
+  letter-spacing: 1.8px;
+}
+
+.settings-page {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.settings-future {
+  grid-column: 1 / -1;
+}
+
+.settings-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.settings-list div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.settings-list dt {
+  color: #8f98a5;
+  font-size: 12px;
+  letter-spacing: .8px;
+}
+
+.settings-list dd {
+  margin: 0;
+  color: #fff;
+  font-weight: 700;
+}
+
+.setting-enabled {
+  color: #54d98c !important;
+}
+
+.settings-action {
+  display: inline-flex;
+  justify-content: center;
+  margin-top: 16px;
+  padding: 11px 18px;
+  color: #101318;
+  background: var(--control-yellow);
+  border-radius: 5px;
+  font-family: Impact, sans-serif;
+  font-style: italic;
+  letter-spacing: .7px;
+  text-decoration: none;
+}
+
+.settings-card p {
+  color: #aeb5bf;
+  line-height: 1.6;
+}
+
+.settings-card > strong {
+  color: var(--control-yellow);
+}
+
+@media (max-width: 1000px) {
+  .settings-page {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-future {
+    grid-column: auto;
+  }
+}
