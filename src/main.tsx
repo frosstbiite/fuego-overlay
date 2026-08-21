@@ -4,6 +4,7 @@ import {
 } from 'react-dom/client'
 
 import './index.css'
+import './v11.css'
 import App from './App.tsx'
 import RaceTicker from './RaceTicker.tsx'
 import ControlPanel from './ControlPanel.tsx'
