@@ -151,14 +151,6 @@ function getLatestRelease() {
   })
 }
 
-async function checkForUpdates() {
-  const latestRelease = await getLatestRelease()
-  if (!latestRelease) return null
-
-  if (!isNewerVersion(latestRelease.version, app.getVersion())) return null
-  return latestRelease
-}
-
 async function showUpdateAvailable(release) {
   const result = await dialog.showMessageBox(controlWindow, {
     type: 'info',
@@ -273,9 +265,12 @@ function createControlWindow() {
   controlWindow.on('closed', () => { controlWindow = null })
 }
 
-async function revealControlWindow() {
+async function revealControlWindow(finalStatus, finalDetail) {
   if (!controlWindow || controlWindow.isDestroyed()) return
-  await updateSplash(100, 'Ready', 'Fuego Overlay Management System')
+  await updateSplash(100, finalStatus, finalDetail)
+
+  // Keep the finished splash on screen long enough to serve as branding.
+  await new Promise((resolve) => setTimeout(resolve, 5000))
 
   if (splashWindow && !splashWindow.isDestroyed()) {
     try {
@@ -314,17 +309,32 @@ app.whenReady().then(async () => {
       await updateSplash(48, 'Development mode...', 'Using external Vite and telemetry services')
     }
 
-    await updateSplash(68, 'Loading driver profiles...', 'Preparing Race Control')
+    await updateSplash(68, 'Loading driver profiles...', 'Preparing Driver Profile')
     createControlWindow()
     await new Promise((resolve) => {
       controlWindow?.webContents.once('did-finish-load', resolve)
     })
 
     await updateSplash(82, 'Checking for updates...', `Installed version v${app.getVersion()}`)
-    const availableUpdate = await checkForUpdates()
+    const latestRelease = await getLatestRelease()
+    const availableUpdate =
+      latestRelease && isNewerVersion(latestRelease.version, app.getVersion())
+        ? latestRelease
+        : null
+
+    let updateStatus = `UP TO DATE — v${app.getVersion()}`
+    let updateDetail = 'Fuego Overlay is current'
+
+    if (!latestRelease) {
+      updateStatus = 'UPDATE CHECK UNAVAILABLE'
+      updateDetail = 'Fuego Overlay will continue normally'
+    } else if (availableUpdate) {
+      updateStatus = `UPDATE AVAILABLE — ${availableUpdate.version}`
+      updateDetail = 'A newer Fuego Overlay release is available'
+    }
 
     await updateSplash(94, 'Preparing overlays...', 'Loading driver and ticker views')
-    await revealControlWindow()
+    await revealControlWindow(updateStatus, updateDetail)
 
     if (availableUpdate) {
       setTimeout(() => {
