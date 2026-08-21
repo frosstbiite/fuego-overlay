@@ -12,6 +12,9 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/build-v1.1-test.yml'
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build-windows:
