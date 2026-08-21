@@ -8,10 +8,13 @@ const {
 
 const fs = require('node:fs')
 const http = require('node:http')
+const https = require('node:https')
 const path = require('node:path')
 
 const WEB_PORT = 5173
 const WEB_HOST = '127.0.0.1'
+const RELEASE_API =
+  'https://api.github.com/repos/frosstbiite/fuego-overlay/releases/latest'
 
 let controlWindow = null
 let splashWindow = null
@@ -20,9 +23,7 @@ let telemetryProcess = null
 
 const singleInstanceLock = app.requestSingleInstanceLock()
 
-if (!singleInstanceLock) {
-  app.quit()
-}
+if (!singleInstanceLock) app.quit()
 
 app.on('second-instance', () => {
   if (!controlWindow) return
@@ -71,17 +72,13 @@ function createSplashWindow() {
     },
   })
 
-  splashWindow.loadFile(
-    path.join(app.getAppPath(), 'electron', 'splash.html'),
-  )
-
+  splashWindow.loadFile(path.join(app.getAppPath(), 'electron', 'splash.html'))
   splashWindow.once('ready-to-show', () => splashWindow?.show())
   splashWindow.on('closed', () => { splashWindow = null })
 }
 
 async function updateSplash(progress, status, detail = '') {
   if (!splashWindow || splashWindow.isDestroyed()) return
-
   try {
     await splashWindow.webContents.executeJavaScript(
       `window.updateSplash?.(${JSON.stringify({ progress, status, detail })})`,
@@ -92,17 +89,102 @@ async function updateSplash(progress, status, detail = '') {
   }
 }
 
+function normalizeVersion(version) {
+  return String(version || '')
+    .trim()
+    .replace(/^v/i, '')
+    .split('-')[0]
+    .split('.')
+    .map((part) => Number.parseInt(part, 10) || 0)
+}
+
+function isNewerVersion(latest, current) {
+  const latestParts = normalizeVersion(latest)
+  const currentParts = normalizeVersion(current)
+  const length = Math.max(latestParts.length, currentParts.length)
+
+  for (let index = 0; index < length; index += 1) {
+    const latestPart = latestParts[index] || 0
+    const currentPart = currentParts[index] || 0
+    if (latestPart > currentPart) return true
+    if (latestPart < currentPart) return false
+  }
+  return false
+}
+
+function getLatestRelease() {
+  return new Promise((resolve) => {
+    const request = https.get(
+      RELEASE_API,
+      {
+        headers: {
+          Accept: 'application/vnd.github+json',
+          'User-Agent': `Fuego-Overlay/${app.getVersion()}`,
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      },
+      (response) => {
+        let body = ''
+        response.setEncoding('utf8')
+        response.on('data', (chunk) => { body += chunk })
+        response.on('end', () => {
+          if (response.statusCode !== 200) {
+            resolve(null)
+            return
+          }
+
+          try {
+            const release = JSON.parse(body)
+            resolve({
+              version: release.tag_name,
+              url: release.html_url,
+            })
+          } catch {
+            resolve(null)
+          }
+        })
+      },
+    )
+
+    request.setTimeout(3000, () => request.destroy())
+    request.on('error', () => resolve(null))
+  })
+}
+
+async function checkForUpdates() {
+  const latestRelease = await getLatestRelease()
+  if (!latestRelease) return null
+
+  if (!isNewerVersion(latestRelease.version, app.getVersion())) return null
+  return latestRelease
+}
+
+async function showUpdateAvailable(release) {
+  const result = await dialog.showMessageBox(controlWindow, {
+    type: 'info',
+    title: 'Fuego Overlay Update Available',
+    message: `Fuego Overlay ${release.version} is available.`,
+    detail: `You are currently running v${app.getVersion()}. Would you like to open the Fuego Overlay Releases page?`,
+    buttons: ['Download Update', 'Later'],
+    defaultId: 0,
+    cancelId: 1,
+    noLink: true,
+  })
+
+  if (result.response === 0 && release.url) {
+    await shell.openExternal(release.url)
+  }
+}
+
 function startWebServer() {
   return new Promise((resolve, reject) => {
     const webRoot = path.join(app.getAppPath(), 'dist')
-
     webServer = http.createServer((request, response) => {
       try {
         const requestUrl = new URL(
           request.url || '/',
           `http://${WEB_HOST}:${WEB_PORT}`,
         )
-
         let requestedPath = decodeURIComponent(requestUrl.pathname)
         if (requestedPath === '/') requestedPath = '/index.html'
         requestedPath = requestedPath.replace(/^[/\\]+/, '')
@@ -131,12 +213,7 @@ function startWebServer() {
     })
 
     webServer.once('error', reject)
-    webServer.listen(WEB_PORT, WEB_HOST, () => {
-      console.log(
-        `Fuego Overlay web server listening on http://${WEB_HOST}:${WEB_PORT}`,
-      )
-      resolve()
-    })
+    webServer.listen(WEB_PORT, WEB_HOST, () => resolve())
   })
 }
 
@@ -166,7 +243,6 @@ function stopBackgroundServices() {
     telemetryProcess.kill()
     telemetryProcess = null
   }
-
   if (webServer) {
     webServer.close()
     webServer = null
@@ -189,21 +265,16 @@ function createControlWindow() {
     },
   })
 
-  controlWindow.loadURL(
-    `http://${WEB_HOST}:${WEB_PORT}/?view=control`,
-  )
-
+  controlWindow.loadURL(`http://${WEB_HOST}:${WEB_PORT}/?view=control`)
   controlWindow.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url)
     return { action: 'deny' }
   })
-
   controlWindow.on('closed', () => { controlWindow = null })
 }
 
 async function revealControlWindow() {
   if (!controlWindow || controlWindow.isDestroyed()) return
-
   await updateSplash(100, 'Ready', 'Fuego Overlay Management System')
 
   if (splashWindow && !splashWindow.isDestroyed()) {
@@ -227,7 +298,6 @@ async function revealControlWindow() {
 app.whenReady().then(async () => {
   try {
     createSplashWindow()
-
     await new Promise((resolve) => {
       splashWindow?.webContents.once('did-finish-load', resolve)
     })
@@ -235,49 +305,36 @@ app.whenReady().then(async () => {
     await updateSplash(12, 'Initializing...', 'Fuego Software')
 
     if (app.isPackaged) {
-      await updateSplash(
-        30,
-        'Starting telemetry...',
-        'Connecting Fuego telemetry service',
-      )
+      await updateSplash(28, 'Starting telemetry...', 'Connecting Fuego telemetry service')
       startTelemetryService()
 
-      await updateSplash(
-        52,
-        'Starting overlay server...',
-        `Preparing ${WEB_HOST}:${WEB_PORT}`,
-      )
+      await updateSplash(48, 'Starting overlay server...', `Preparing ${WEB_HOST}:${WEB_PORT}`)
       await startWebServer()
     } else {
-      await updateSplash(
-        52,
-        'Development mode...',
-        'Using external Vite and telemetry services',
-      )
+      await updateSplash(48, 'Development mode...', 'Using external Vite and telemetry services')
     }
 
-    await updateSplash(
-      76,
-      'Loading driver profiles...',
-      'Preparing Race Control',
-    )
-
+    await updateSplash(68, 'Loading driver profiles...', 'Preparing Race Control')
     createControlWindow()
-
     await new Promise((resolve) => {
       controlWindow?.webContents.once('did-finish-load', resolve)
     })
 
-    await updateSplash(
-      92,
-      'Preparing overlays...',
-      'Loading driver and ticker views',
-    )
+    await updateSplash(82, 'Checking for updates...', `Installed version v${app.getVersion()}`)
+    const availableUpdate = await checkForUpdates()
 
+    await updateSplash(94, 'Preparing overlays...', 'Loading driver and ticker views')
     await revealControlWindow()
+
+    if (availableUpdate) {
+      setTimeout(() => {
+        showUpdateAvailable(availableUpdate).catch((error) => {
+          console.error('Could not show update notification:', error)
+        })
+      }, 500)
+    }
   } catch (error) {
     console.error('Could not start Fuego Overlay:', error)
-
     if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close()
 
     dialog.showErrorBox(
