@@ -2,7 +2,7 @@
   "name": "fuego-overlay",
   "productName": "Fuego Overlay",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Customizable iRacing broadcast overlays for drivers and streamers.",
   "author": {
     "name": "Fuego AutoSport",
@@ -24,7 +24,9 @@
     "pack": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "patch:build": "npm run build && electron-builder --win --dir && node scripts/create-patch.cjs",
+    "patch:create": "node scripts/create-patch.cjs"
   },
   "dependencies": {
     "irsdk-node": "^4.4.0",
