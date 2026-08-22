@@ -1,4 +1,4 @@
-import { type CSSProperties } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { normalizeDriverLayout, type DriverLayoutConfig, type WidgetPlacement } from './layoutTypes'
 import { useTelemetrySocket } from './useTelemetrySocket'
 
@@ -87,13 +87,21 @@ function skies(value?: number) {
 }
 
 export default function ExtraDriverWidgets() {
-  let latest: Data = { connected: false }
-  const state = { current: latest }
-  useTelemetrySocket<Data>((data) => { state.current = data; latest = data }, undefined, 'driver')
+  const [data, setData] = useState<Data>({ connected: false })
 
-  /* useTelemetrySocket triggers its owner render when data changes in the normal app;
-     this component receives a fresh render through the shared websocket lifecycle. */
-  const data = state.current
+  useTelemetrySocket<Data>(
+    (incoming) => {
+      if (incoming.type === 'profile') return
+      setData(incoming)
+    },
+    (connected) => {
+      if (!connected) {
+        setData((current) => ({ ...current, connected: false }))
+      }
+    },
+    'driver',
+  )
+
   const settings = data.settings ?? defaultSettings
   const layout = normalizeDriverLayout(settings.driverLayout)
 
