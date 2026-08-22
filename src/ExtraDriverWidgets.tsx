@@ -99,7 +99,7 @@ export default function ExtraDriverWidgets() {
         setData((current) => ({ ...current, connected: false }))
       }
     },
-    'driver',
+    'unknown',
   )
 
   const settings = data.settings ?? defaultSettings
