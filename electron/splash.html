@@ -125,7 +125,7 @@
 <body>
   <main class="splash" aria-label="Fuego Overlay startup">
     <section class="startup-panel">
-      <div id="version" class="version">v1.1.0</div>
+      <div id="version" class="version">FUEGO OVERLAY</div>
       <div class="progress-shell" aria-hidden="true">
         <div id="progress" class="progress-bar"></div>
       </div>
@@ -138,12 +138,14 @@
     const progressElement = document.getElementById('progress')
     const statusElement = document.getElementById('status')
     const detailElement = document.getElementById('detail')
+    const versionElement = document.getElementById('version')
 
-    window.updateSplash = ({ progress, status, detail = '' }) => {
+    window.updateSplash = ({ progress, status, detail = '', version = '' }) => {
       const safeProgress = Math.max(0, Math.min(100, Number(progress) || 0))
       progressElement.style.width = `${safeProgress}%`
       statusElement.textContent = status || 'Initializing...'
       detailElement.textContent = detail
+      if (version) versionElement.textContent = version
     }
 
     window.finishSplash = () => {
