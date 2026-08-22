@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "product": "Fuego Overlay",
+  "version": "1.1.1",
+  "minimumUpdaterVersion": "1.1.1",
+  "requiresInstaller": true,
+  "notes": "First Fuego build with the in-app patch updater. Install v1.1.1 once; future maintenance updates can be installed inside Fuego.",
+  "releaseUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.1",
+  "patchUrl": "",
+  "patchSha256": "",
+  "manifestUrl": "",
+  "manifestSha256": "",
+  "installerUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.1"
+}
