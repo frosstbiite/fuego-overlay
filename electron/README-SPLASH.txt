@@ -1,0 +1,1 @@
+Fuego splash artwork for v1.1 startup screen.

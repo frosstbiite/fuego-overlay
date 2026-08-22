@@ -62,7 +62,7 @@ type ProfileMessage = {
   profile: DriverProfile | null
 }
 
-type ControlTab = 'race' | 'profiles'
+type ControlTab = 'driver' | 'overlay' | 'broadcaster' | 'race' | 'settings'
 
 const SETTINGS_KEY = 'fuego-overlay-settings'
 const LEGACY_SETTINGS_KEY = 'frost-overlay-settings'
@@ -213,7 +213,7 @@ function ControlPanel() {
     useRef<number | null>(null)
 
   const [activeTab, setActiveTab] =
-    useState<ControlTab>('race')
+    useState<ControlTab>('driver')
 
   const [profiles, setProfiles] =
     useState<DriverProfile[]>(loadSavedProfiles)
@@ -230,7 +230,7 @@ function ControlPanel() {
   /*
    * This is a snapshot of the profile that has actually been applied.
    * Editing or saving a profile must not alter the live GUI/overlays until
-   * APPLY PROFILE is pressed in Race Control.
+   * APPLY PROFILE is pressed in Driver Profile.
    */
   const [activeProfile, setActiveProfile] =
     useState<DriverProfile>(() =>
@@ -612,6 +612,7 @@ function ControlPanel() {
     window.open(
       driverOverlayUrl,
       '_blank',
+      'noopener,noreferrer',
     )
   }
 
@@ -619,13 +620,13 @@ function ControlPanel() {
     window.open(
       tickerOverlayUrl,
       '_blank',
+      'noopener,noreferrer',
     )
   }
 
   async function copySourceUrl(
     source:
-      | 'driver'
-      | 'ticker',
+      'driver' | 'ticker',
   ) {
     const sourceUrl =
       source === 'driver'
@@ -639,12 +640,21 @@ function ControlPanel() {
 
       setCopiedSource(source)
 
-      window.setTimeout(() => {
-        setCopiedSource(null)
-      }, 1500)
+      window.setTimeout(
+        () => {
+          setCopiedSource(
+            (currentSource) =>
+              currentSource ===
+              source
+                ? null
+                : currentSource,
+          )
+        },
+        1500,
+      )
     } catch (error) {
       console.error(
-        'Could not copy browser-source URL:',
+        'Could not copy OBS source:',
         error,
       )
     }
@@ -719,23 +729,70 @@ function ControlPanel() {
         </header>
 
         <nav className="control-tabs" aria-label="Control sections">
-          <button
-            type="button"
-            className={activeTab === 'race' ? 'active' : ''}
-            onClick={() => setActiveTab('race')}
-          >
-            RACE CONTROL
-          </button>
-          <button
-            type="button"
-            className={activeTab === 'profiles' ? 'active' : ''}
-            onClick={() => setActiveTab('profiles')}
-          >
-            DRIVER PROFILES
-          </button>
+          {[
+            ['driver', 'DRIVER PROFILE'],
+            ['overlay', 'OVERLAY CONTROL'],
+            ['broadcaster', 'BROADCASTER'],
+            ['race', 'RACE CONTROL'],
+            ['settings', 'SETTINGS'],
+          ].map(([tab, label]) => (
+            <button
+              key={tab}
+              type="button"
+              className={activeTab === tab ? 'active' : ''}
+              onClick={() => setActiveTab(tab as ControlTab)}
+            >
+              {label}
+            </button>
+          ))}
         </nav>
 
-        {activeTab === 'race' ? (
+        {activeTab === 'driver' && (
+          <div className="tab-page">
+            <section className="control-card driver-card driver-profile-summary">
+              <h2>ACTIVE DRIVER PROFILE</h2>
+              <label className="control-label" htmlFor="selected-profile">
+                DRIVER PROFILE
+              </label>
+              <div className="profile-select-row">
+                <select
+                  id="selected-profile"
+                  value={selectedProfileId}
+                  onChange={(event) => setSelectedProfileId(event.target.value)}
+                >
+                  {profiles.map((profile) => (
+                    <option key={profile.id} value={profile.id}>
+                      {`#${profile.carNumber} — ${profile.profileName}`}
+                    </option>
+                  ))}
+                </select>
+                <button type="button" className="apply-button" onClick={applySelectedProfile}>
+                  APPLY PROFILE
+                </button>
+              </div>
+              <div className="selected-driver">
+                <strong>#{activeProfile.carNumber}</strong>
+                <span>
+                  {activeProfile.firstName}{' '}
+                  {activeProfile.nickname && `“${activeProfile.nickname}” `}
+                  {activeProfile.lastName}
+                </span>
+              </div>
+              <div className="detected-driver">
+                iRACING: {driverName || 'DRIVER NOT DETECTED'}
+              </div>
+            </section>
+            <ProfileManager
+            profiles={profiles}
+            activeProfileId={editingProfileId}
+            onActivate={activateProfile}
+            onSave={saveProfile}
+            onDelete={deleteProfile}
+          />
+          </div>
+        )}
+
+        {activeTab === 'overlay' && (
         <div className="control-grid">
           <section className="control-card driver-card">
             <h2>
@@ -1158,18 +1215,67 @@ function ControlPanel() {
           </section>
         </div>
 
-        ) : (
-          <ProfileManager
-            profiles={profiles}
-            activeProfileId={editingProfileId}
-            onActivate={activateProfile}
-            onSave={saveProfile}
-            onDelete={deleteProfile}
-          />
+        )}
+
+        {activeTab === 'broadcaster' && (
+          <section className="coming-soon-page">
+            <span className="coming-soon-kicker">FUEGO BROADCAST SUITE</span>
+            <h2>BROADCASTER</h2>
+            <p>Camera switching, driver focus, live TV graphics, replay controls, and broadcast hotkeys are planned for a future release.</p>
+            <strong>COMING SOON</strong>
+          </section>
+        )}
+
+        {activeTab === 'race' && (
+          <section className="coming-soon-page">
+            <span className="coming-soon-kicker">FUEGO RACE ADMINISTRATION</span>
+            <h2>RACE CONTROL</h2>
+            <p>Caution controls, pace-lap management, driver black flags, DQ protection, command lockouts, and race-control history are planned for a future release.</p>
+            <strong>COMING SOON</strong>
+          </section>
+        )}
+
+        {activeTab === 'settings' && (
+          <div className="settings-page">
+            <section className="control-card settings-card">
+              <h2>APPLICATION</h2>
+              <dl className="settings-list">
+                <div><dt>VERSION</dt><dd>v1.1.0</dd></div>
+                <div><dt>UPDATE CHANNEL</dt><dd>STABLE</dd></div>
+                <div><dt>AUTOMATIC UPDATE CHECK</dt><dd className="setting-enabled">ENABLED</dd></div>
+                <div><dt>STARTUP SPLASH</dt><dd className="setting-enabled">ENABLED</dd></div>
+                <div><dt>BRANDING HOLD</dt><dd>5 SECONDS</dd></div>
+              </dl>
+              <a
+                className="settings-action"
+                href="https://github.com/frosstbiite/fuego-overlay/releases/latest"
+                target="_blank"
+                rel="noreferrer"
+              >
+                CHECK FOR UPDATES
+              </a>
+            </section>
+
+            <section className="control-card settings-card">
+              <h2>LOCAL SERVICES</h2>
+              <dl className="settings-list">
+                <div><dt>OVERLAY SERVER</dt><dd>127.0.0.1:5173</dd></div>
+                <div><dt>TELEMETRY SERVICE</dt><dd>127.0.0.1:3200</dd></div>
+                <div><dt>TELEMETRY STATUS</dt><dd>{serverConnected ? 'ONLINE' : 'OFFLINE'}</dd></div>
+                <div><dt>iRACING STATUS</dt><dd>{iracingConnected ? 'CONNECTED' : 'WAITING'}</dd></div>
+              </dl>
+            </section>
+
+            <section className="control-card settings-card settings-future">
+              <h2>GENERAL SETTINGS</h2>
+              <p>Additional startup, update, port, and application preferences will live here as Fuego Overlay expands.</p>
+              <strong>MORE SETTINGS COMING SOON</strong>
+            </section>
+          </div>
         )}
 
           <footer className="control-footer">
-          FUEGO OVERLAY v1.0.0
+          FUEGO OVERLAY v1.1.0
           {' • '}
           © 2026 FUEGO AUTOSPORT
           {' • '}
