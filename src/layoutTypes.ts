@@ -15,6 +15,9 @@ export type DriverWidgetId =
   | 'sessionRemaining'
   | 'incidents'
   | 'pitInfo'
+  | 'tireInfo'
+  | 'weather'
+  | 'gapBattle'
 
 export type WidgetVariant = 'compact' | 'standard' | 'expanded'
 
@@ -101,6 +104,9 @@ export const driverWidgetLabels: Record<DriverWidgetId, string> = {
   sessionRemaining: 'Session Remaining',
   incidents: 'Incident Count',
   pitInfo: 'Pit Status / Laps Since Pit',
+  tireInfo: 'Tire Info',
+  weather: 'Weather',
+  gapBattle: 'Gap Ahead / Behind',
 }
 
 export const widgetConditionLabels: Record<WidgetCondition, string> = {
@@ -111,7 +117,6 @@ export const widgetConditionLabels: Record<WidgetCondition, string> = {
   'white-flag': 'Only on White Flag',
   'local-telemetry': 'Only when Local Data Exists',
 }
-
 
 export const widgetVariantSizes: Record<
   DriverWidgetId,
@@ -187,6 +192,21 @@ export const widgetVariantSizes: Record<
     standard: { width: 18, height: 10 },
     expanded: { width: 27, height: 14 },
   },
+  tireInfo: {
+    compact: { width: 16, height: 9 },
+    standard: { width: 26, height: 14 },
+    expanded: { width: 38, height: 20 },
+  },
+  weather: {
+    compact: { width: 14, height: 8 },
+    standard: { width: 22, height: 12 },
+    expanded: { width: 32, height: 16 },
+  },
+  gapBattle: {
+    compact: { width: 15, height: 8 },
+    standard: { width: 24, height: 11 },
+    expanded: { width: 36, height: 15 },
+  },
 }
 
 export const widgetMinimums: Record<DriverWidgetId, { width: number; height: number }> = {
@@ -204,6 +224,9 @@ export const widgetMinimums: Record<DriverWidgetId, { width: number; height: num
   sessionRemaining: { width: 12, height: 8 },
   incidents: { width: 9, height: 8 },
   pitInfo: { width: 14, height: 8 },
+  tireInfo: { width: 16, height: 9 },
+  weather: { width: 14, height: 8 },
+  gapBattle: { width: 15, height: 8 },
 }
 
 function placement(
@@ -243,6 +266,9 @@ export const defaultDriverLayout: DriverLayoutConfig = {
   sessionRemaining: placement(83, 70, 15, 10, false, false, 'compact'),
   incidents: placement(2, 58, 10, 9, false, false, 'compact', 'local-telemetry'),
   pitInfo: placement(14, 58, 18, 9, false, false, 'standard', 'pit-road'),
+  tireInfo: placement(34, 58, 26, 14, false, false, 'standard', 'local-telemetry'),
+  weather: placement(62, 58, 22, 12, false, false, 'standard'),
+  gapBattle: placement(62, 44, 24, 11, false, false, 'standard'),
 }
 
 export function normalizeDriverLayout(
