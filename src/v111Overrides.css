@@ -1,0 +1,217 @@
+/* Fuego Overlay v1.1.1 final UI overrides. */
+
+/* Overlay Control cleanup: the old Overlay Elements card is gone. */
+.control-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, .95fr) minmax(360px, 1.05fr);
+  grid-template-areas:
+    'race session'
+    'obs obs';
+  align-items: stretch;
+  gap: 12px;
+  padding: 14px;
+}
+
+.race-card { grid-area: race; }
+.session-card { grid-area: session; }
+.obs-card { grid-area: obs; min-height: 0; }
+.race-iracing-id { color: var(--control-yellow); }
+
+@media (min-width: 1400px) {
+  .control-grid {
+    grid-template-columns: minmax(360px, .9fr) minmax(460px, 1.1fr);
+  }
+  .race-card,
+  .session-card { min-height: 250px; }
+}
+
+@media (max-width: 900px) {
+  .control-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'race' 'session' 'obs';
+  }
+}
+
+.settings-update-button {
+  border: 0;
+  cursor: pointer;
+}
+
+.settings-update-button:disabled {
+  opacity: .55;
+  cursor: default;
+}
+
+/* Settings controls. */
+.settings-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.settings-three-column {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.settings-form-grid > label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 11px;
+  background: rgba(7,10,15,.56);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 6px;
+}
+
+.settings-form-grid > label > span,
+.settings-toggle-row strong {
+  color: #dfe5ed;
+  font: 800 9px Arial, sans-serif;
+  letter-spacing: .7px;
+}
+
+.settings-form-grid select,
+.settings-form-grid input[type='range'] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.settings-form-grid select {
+  padding: 8px 9px;
+  color: #fff;
+  background: #0b1017;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 5px;
+}
+
+.settings-form-grid select:disabled { opacity: .45; }
+
+.settings-toggle-row {
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center;
+}
+
+.settings-toggle-row > span {
+  display: grid;
+  gap: 4px;
+}
+
+.settings-toggle-row small {
+  color: #818b98;
+  font: 400 9px/1.35 Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+.settings-toggle-row input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--control-yellow);
+}
+
+.settings-recovery { grid-column: 1 / -1; }
+.settings-recovery-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.settings-recovery-actions button {
+  padding: 9px 12px;
+  color: #eef2f7;
+  background: #151b24;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 5px;
+  font: 800 9px Arial, sans-serif;
+  letter-spacing: .45px;
+  cursor: pointer;
+}
+.settings-recovery-actions button:hover { border-color: var(--control-yellow); }
+.settings-recovery-actions .settings-danger { color: #fff; background: #4e161a; border-color: #8d2b32; }
+.settings-recovery-actions .settings-danger:hover { border-color: #ff6b73; }
+.control-panel { zoom: var(--control-ui-scale, 1); }
+
+@media (max-width: 1200px) {
+  .settings-three-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 760px) {
+  .settings-form-grid,
+  .settings-three-column { grid-template-columns: 1fr; }
+}
+
+/* Global overlay appearance preferences. */
+.overlay-stage,
+.driver-layout-stage,
+.race-ticker-stage {
+  opacity: var(--overlay-opacity, 1);
+}
+
+.overlay-animations-off,
+.overlay-animations-off::before,
+.overlay-animations-off::after,
+.overlay-animations-off *,
+.overlay-animations-off *::before,
+.overlay-animations-off *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Tire Info widget. */
+.driver-tire-widget {
+  display: grid;
+  grid-template-rows: auto minmax(0,1fr);
+  padding: 5cqh 4cqw;
+  background: linear-gradient(135deg, rgba(8,13,20,.96), rgba(16,22,32,.92));
+}
+.driver-tire-heading { display: flex; justify-content: space-between; align-items: center; gap: 4cqw; padding-bottom: 5cqh; }
+.driver-tire-heading strong { color: var(--profile-number); font: 900 clamp(8px,9cqh,14px)/1 Arial,sans-serif; }
+.driver-tire-heading span { color: #778493; font: 800 clamp(5px,6cqh,9px)/1 Arial,sans-serif; }
+.driver-tire-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 3cqh 2cqw; min-height: 0; }
+.driver-tire-corner { display: grid; place-items: center; align-content: center; gap: 2cqh; min-width: 0; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.08); border-radius: 4px; }
+.driver-tire-corner b { color: var(--profile-number); font: 900 clamp(7px,9cqh,12px)/1 Arial,sans-serif; }
+.driver-tire-corner strong { font: 900 clamp(9px,14cqh,20px)/1 Arial,sans-serif; }
+.driver-tire-corner small,
+.driver-tire-corner em { color: #9ba6b4; font: 800 clamp(5px,6cqh,9px)/1 Arial,sans-serif; font-style: normal; }
+.driver-tire-compact { display: grid; place-items: center; align-content: center; gap: 4cqh; height: 100%; }
+.driver-tire-compact span,
+.driver-tire-compact small { color: #8f9baa; font: 800 clamp(6px,9cqh,10px)/1 Arial,sans-serif; }
+.driver-tire-compact strong { color: var(--profile-number); font: 900 clamp(16px,30cqh,34px)/1 Arial,sans-serif; }
+
+/* Weather widget. */
+.driver-weather-widget {
+  display: grid;
+  grid-template-rows: auto minmax(0,1fr);
+  padding: 5cqh 4cqw;
+  background: linear-gradient(135deg, rgba(7,15,25,.96), rgba(13,23,35,.92));
+}
+.driver-weather-heading { color: var(--profile-number); font: 900 clamp(8px,9cqh,14px)/1 Arial,sans-serif; padding-bottom: 5cqh; }
+.driver-weather-grid { display: grid; grid-template-columns: repeat(3,1fr); min-height: 0; }
+.driver-weather-grid > div,
+.driver-weather-extra > div,
+.driver-weather-primary { display: grid; place-items: center; align-content: center; gap: 3cqh; }
+.driver-weather-grid > div + div { border-left: 1px solid rgba(255,255,255,.1); }
+.driver-weather-grid span,
+.driver-weather-extra span,
+.driver-weather-primary span { color: #8d99a8; font: 800 clamp(5px,7cqh,10px)/1 Arial,sans-serif; }
+.driver-weather-grid strong,
+.driver-weather-primary strong { font: 900 clamp(10px,18cqh,25px)/1 Arial,sans-serif; }
+.driver-weather-primary { height: 100%; }
+.driver-weather-extra { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid rgba(255,255,255,.1); margin-top: 4cqh; padding-top: 4cqh; }
+.driver-weather-extra strong { color: #e5ebf2; font: 800 clamp(7px,9cqh,13px)/1 Arial,sans-serif; }
+.driver-widget-expanded.driver-weather-widget { grid-template-rows: auto 1fr auto; }
+
+/* Gap Ahead / Behind widget. */
+.driver-gap-widget {
+  display: grid;
+  grid-template-rows: auto minmax(0,1fr) auto;
+  padding: 4cqh 3cqw;
+  background: linear-gradient(135deg, rgba(7,10,15,.97), rgba(15,21,30,.93));
+}
+.driver-gap-heading { color: var(--profile-number); font: 900 clamp(7px,8cqh,12px)/1 Arial,sans-serif; padding-bottom: 4cqh; text-align: center; }
+.driver-gap-grid { display: grid; grid-template-columns: 1fr .65fr 1fr; min-height: 0; }
+.driver-gap-grid > div { display: grid; place-items: center; align-content: center; gap: 3cqh; min-width: 0; }
+.driver-gap-grid > div + div { border-left: 1px solid rgba(255,255,255,.1); }
+.driver-gap-grid span { color: #8793a2; font: 800 clamp(5px,7cqh,10px)/1 Arial,sans-serif; }
+.driver-gap-grid b { max-width: 96%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #bcc5cf; font: 800 clamp(6px,7cqh,10px)/1 Arial,sans-serif; }
+.driver-gap-grid strong { font: 900 clamp(11px,20cqh,28px)/1 Arial,sans-serif; }
+.driver-gap-ahead strong { color: #ffcf35; }
+.driver-gap-behind strong { color: #54d98c; }
+.driver-gap-selected strong { color: var(--profile-number); }
+.driver-gap-note { padding-top: 3cqh; color: #737f8d; font: 800 clamp(5px,6cqh,8px)/1 Arial,sans-serif; text-align: center; letter-spacing: .05em; }
+.driver-widget-compact.driver-gap-widget { grid-template-rows: 1fr; padding: 2cqh 2cqw; }
+.driver-widget-compact.driver-gap-widget .driver-gap-grid { grid-row: 1; }
