@@ -1,4 +1,7 @@
 .race-ticker-stage {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 1920px;
   height: 90px;
   padding: 6px 20px;
@@ -15,449 +18,43 @@
   --profile-trim: #2f8cff;
   --profile-number: #fff200;
   --profile-text: #ffffff;
-
   position: relative;
   isolation: isolate;
-
   display: grid;
-  grid-template-columns:
-    215px
-    1fr
-    245px;
-
+  grid-template-columns: 215px 1fr 245px;
   width: 1880px;
   height: 72px;
-
   overflow: hidden;
   box-sizing: border-box;
-
   color: var(--profile-text);
-
-  background:
-    linear-gradient(
-      105deg,
-      var(--profile-secondary) 0%,
-      var(--profile-primary) 13%,
-      color-mix(in srgb, var(--profile-primary) 45%, #20242a) 29%,
-      #20242a 42%,
-      #14181e 100%
-    );
-
-  border:
-    3px
-    solid
-    var(--ticker-flag);
-
+  background: linear-gradient(105deg,var(--profile-secondary) 0%,var(--profile-primary) 13%,color-mix(in srgb,var(--profile-primary) 45%,#20242a) 29%,#20242a 42%,#14181e 100%);
+  border: 3px solid var(--ticker-flag);
   border-radius: 9px;
-
-  box-shadow:
-    0 8px 15px rgba(0, 0, 0, 0.65),
-    0 0 7px var(--ticker-glow);
-
-  /*
-   * No animation is applied to the entire ticker.
-   * This prevents the color-change blink.
-   */
+  box-shadow: 0 8px 15px rgba(0,0,0,.65),0 0 7px var(--ticker-glow);
 }
-
-/* Green-flag state */
-.race-ticker-green {
-  --ticker-flag: #00e85a;
-  --ticker-glow: rgba(0, 232, 90, 0.75);
-}
-
-/* Yellow caution state */
-.race-ticker-yellow {
-  --ticker-flag: #ffe600;
-  --ticker-glow: rgba(255, 230, 0, 0.85);
-}
-
-/* White-flag state */
-.race-ticker-white {
-  --ticker-flag: #ffffff;
-  --ticker-glow: rgba(255, 255, 255, 0.85);
-}
-
-/* Pre-race pacing state */
-.race-ticker-pacing {
-  --ticker-flag: var(--profile-trim);
-  --ticker-glow: color-mix(in srgb, var(--profile-trim) 80%, transparent);
-}
-
-/* Checkered state */
-.race-ticker-checkered {
-  --ticker-flag: #ffffff;
-  --ticker-glow: rgba(255, 255, 255, 0.9);
-}
-
-/*
- * Colored sweep that plays whenever the flag
- * state changes.
- */
-.race-ticker::after {
-  content: '';
-
-  position: absolute;
-  z-index: 1;
-
-  top: 0;
-  bottom: 0;
-  left: -50%;
-
-  width: 45%;
-
-  pointer-events: none;
-
-  background:
-    linear-gradient(
-      100deg,
-      transparent 0%,
-
-      color-mix(
-        in srgb,
-        var(--ticker-flag) 25%,
-        transparent
-      ) 25%,
-
-      color-mix(
-        in srgb,
-        var(--ticker-flag) 90%,
-        transparent
-      ) 50%,
-
-      color-mix(
-        in srgb,
-        var(--ticker-flag) 25%,
-        transparent
-      ) 75%,
-
-      transparent 100%
-    );
-
-  filter: blur(2px);
-
-  transform: skewX(-18deg);
-
-  animation:
-    race-flag-sweep
-    900ms
-    ease-out;
-}
-
-/*
- * Keep ticker information above the sweep.
- */
-.race-ticker > * {
-  position: relative;
-  z-index: 2;
-}
-
-/* Flag-status section */
-.race-status {
-  display: flex;
-  align-items: center;
-
-  gap: 13px;
-
-  padding-left: 23px;
-
-  box-sizing: border-box;
-
-  border-right:
-    2px
-    solid
-    rgba(255, 255, 255, 0.2);
-}
-
-.status-light {
-  width: 18px;
-  height: 18px;
-
-  flex: 0 0 auto;
-
-  border-radius: 50%;
-
-  background:
-    var(--ticker-flag);
-
-  box-shadow:
-    0 0 7px var(--ticker-flag),
-    0 0 14px var(--ticker-glow);
-}
-
-.race-status strong {
-  white-space: nowrap;
-
-  font-family:
-    Impact,
-    Haettenschweiler,
-    'Arial Narrow Bold',
-    sans-serif;
-
-  font-size: 25px;
-  font-style: italic;
-  letter-spacing: 0.8px;
-}
-
-/* Scrolling leaderboard window */
-.leaderboard-window {
-  min-width: 0;
-  overflow: hidden;
-}
-
-.leaderboard-scroll {
-  display: flex;
-  align-items: center;
-
-  width: max-content;
-  height: 100%;
-
-  animation:
-    leaderboard-marquee
-    var(--ticker-duration)
-    linear
-    infinite;
-}
-
-.leaderboard-group {
-  display: flex;
-  align-items: center;
-
-  gap: 36px;
-
-  padding-right: 36px;
-}
-
-.leaderboard-entry {
-  display: flex;
-  align-items: center;
-
-  gap: 9px;
-
-  flex: 0 0 auto;
-
-  white-space: nowrap;
-}
-
-.leaderboard-position {
-  color: white;
-
-  font-family:
-    Impact,
-    Haettenschweiler,
-    'Arial Narrow Bold',
-    sans-serif;
-
-  font-size: 28px;
-  font-style: italic;
-}
-
-.leaderboard-number {
-  color: var(--profile-number);
-
-  font-family:
-    Impact,
-    Haettenschweiler,
-    'Arial Narrow Bold',
-    sans-serif;
-
-  font-size: 24px;
-  font-style: italic;
-
-  text-shadow:
-    1px 2px 1px black;
-}
-
-.leaderboard-name {
-  font-family:
-    Impact,
-    Haettenschweiler,
-    'Arial Narrow Bold',
-    sans-serif;
-
-  font-size: 23px;
-  font-style: italic;
-  letter-spacing: 0.5px;
-}
-
-/* Lap counter */
-.lap-counter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  white-space: nowrap;
-
-  color: var(--profile-number);
-
-  background:
-    rgba(10, 13, 17, 0.78);
-
-  border-left:
-    2px
-    solid
-    rgba(255, 255, 255, 0.2);
-
-  font-family:
-    Impact,
-    Haettenschweiler,
-    'Arial Narrow Bold',
-    sans-serif;
-
-  font-size: 27px;
-  font-style: italic;
-  letter-spacing: 0.6px;
-}
-
-/* Checkered status light */
-.race-ticker-checkered .status-light {
-  border-radius: 3px;
-
-  background-color: white;
-
-  background-image:
-    linear-gradient(
-      45deg,
-      #111111 25%,
-      transparent 25%,
-      transparent 75%,
-      #111111 75%
-    ),
-    linear-gradient(
-      45deg,
-      #111111 25%,
-      #ffffff 25%,
-      #ffffff 75%,
-      #111111 75%
-    );
-
-  background-position:
-    0 0,
-    5px 5px;
-
-  background-size:
-    10px 10px;
-}
-
-/* Checkered sweep */
-.race-ticker-checkered::after {
-  background-color: white;
-
-  background-image:
-    linear-gradient(
-      45deg,
-      #111111 25%,
-      transparent 25%,
-      transparent 75%,
-      #111111 75%
-    ),
-    linear-gradient(
-      45deg,
-      #111111 25%,
-      #ffffff 25%,
-      #ffffff 75%,
-      #111111 75%
-    );
-
-  background-position:
-    0 0,
-    14px 14px;
-
-  background-size:
-    28px 28px;
-
-  -webkit-mask-image:
-    linear-gradient(
-      90deg,
-      transparent 0%,
-      black 20%,
-      black 80%,
-      transparent 100%
-    );
-
-  mask-image:
-    linear-gradient(
-      90deg,
-      transparent 0%,
-      black 20%,
-      black 80%,
-      transparent 100%
-    );
-
-  filter:
-    drop-shadow(
-      0 0 8px
-      rgba(255, 255, 255, 0.9)
-    );
-
-  animation:
-    race-flag-sweep
-    1100ms
-    ease-out;
-}
-
-/* Leaderboard scrolling */
-@keyframes leaderboard-marquee {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* Flag-color sweep */
-@keyframes race-flag-sweep {
-  0% {
-    left: -50%;
-    opacity: 0;
-  }
-
-  12% {
-    opacity: 1;
-  }
-
-  85% {
-    opacity: 1;
-  }
-
-  100% {
-    left: 115%;
-    opacity: 0;
-  }
-}
-/* Selected car highlight */
-.leaderboard-entry-selected {
-  position: relative;
-
-  padding:
-    5px 10px;
-
-  background:
-    linear-gradient(
-      110deg,
-      color-mix(in srgb, var(--profile-primary) 85%, transparent),
-      color-mix(in srgb, var(--profile-secondary) 78%, transparent)
-    );
-
-  border:
-    1px solid
-    var(--profile-number);
-
-  border-radius: 5px;
-
-  box-shadow:
-    0 0 8px
-    color-mix(in srgb, var(--profile-number) 45%, transparent);
-}
-
-.leaderboard-entry-selected
-.leaderboard-number {
-  color:
-    var(--profile-number);
-
-  text-shadow:
-    0 0 6px
-    color-mix(in srgb, var(--profile-number) 85%, transparent);
-}
+.race-ticker-green{--ticker-flag:#00e85a;--ticker-glow:rgba(0,232,90,.75)}
+.race-ticker-yellow{--ticker-flag:#ffe600;--ticker-glow:rgba(255,230,0,.85)}
+.race-ticker-white{--ticker-flag:#fff;--ticker-glow:rgba(255,255,255,.85)}
+.race-ticker-pacing{--ticker-flag:var(--profile-trim);--ticker-glow:color-mix(in srgb,var(--profile-trim) 80%,transparent)}
+.race-ticker-checkered{--ticker-flag:#fff;--ticker-glow:rgba(255,255,255,.9)}
+.race-ticker::after{content:'';position:absolute;z-index:1;top:0;bottom:0;left:-50%;width:45%;pointer-events:none;background:linear-gradient(100deg,transparent 0%,color-mix(in srgb,var(--ticker-flag) 25%,transparent) 25%,color-mix(in srgb,var(--ticker-flag) 90%,transparent) 50%,color-mix(in srgb,var(--ticker-flag) 25%,transparent) 75%,transparent 100%);filter:blur(2px);transform:skewX(-18deg);animation:race-flag-sweep 900ms ease-out}
+.race-ticker>*{position:relative;z-index:2}
+.race-status{display:flex;align-items:center;gap:13px;padding-left:23px;box-sizing:border-box;border-right:2px solid rgba(255,255,255,.2)}
+.status-light{width:18px;height:18px;flex:0 0 auto;border-radius:50%;background:var(--ticker-flag);box-shadow:0 0 7px var(--ticker-flag),0 0 14px var(--ticker-glow)}
+.race-status strong{white-space:nowrap;font-family:Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;font-size:25px;font-style:italic;letter-spacing:.8px}
+.leaderboard-window{min-width:0;overflow:hidden}
+.leaderboard-scroll{display:flex;align-items:center;width:max-content;height:100%;animation:leaderboard-marquee var(--ticker-duration) linear infinite}
+.leaderboard-group{display:flex;align-items:center;gap:36px;padding-right:36px}
+.leaderboard-entry{display:flex;align-items:center;gap:9px;flex:0 0 auto;white-space:nowrap}
+.leaderboard-position{color:white;font-family:Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;font-size:28px;font-style:italic}
+.leaderboard-number{color:var(--profile-number);font-family:Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;font-size:24px;font-style:italic;text-shadow:1px 2px 1px black}
+.leaderboard-name{font-family:Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;font-size:23px;font-style:italic;letter-spacing:.5px}
+.lap-counter{display:flex;align-items:center;justify-content:center;white-space:nowrap;color:var(--profile-number);background:rgba(10,13,17,.78);border-left:2px solid rgba(255,255,255,.2);font-family:Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;font-size:27px;font-style:italic;letter-spacing:.6px}
+.race-ticker-checkered .status-light{border-radius:3px;background-color:white;background-image:linear-gradient(45deg,#111 25%,transparent 25%,transparent 75%,#111 75%),linear-gradient(45deg,#111 25%,#fff 25%,#fff 75%,#111 75%);background-position:0 0,5px 5px;background-size:10px 10px}
+.race-ticker-checkered::after{background-color:white;background-image:linear-gradient(45deg,#111 25%,transparent 25%,transparent 75%,#111 75%),linear-gradient(45deg,#111 25%,#fff 25%,#fff 75%,#111 75%);background-position:0 0,14px 14px;background-size:28px 28px;-webkit-mask-image:linear-gradient(90deg,transparent 0%,black 20%,black 80%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0%,black 20%,black 80%,transparent 100%);filter:drop-shadow(0 0 8px rgba(255,255,255,.9));animation:race-flag-sweep 1100ms ease-out}
+@keyframes leaderboard-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes race-flag-sweep{0%{left:-50%;opacity:0}12%{opacity:1}85%{opacity:1}100%{left:115%;opacity:0}}
+.leaderboard-entry-selected{position:relative;padding:5px 10px;background:linear-gradient(110deg,color-mix(in srgb,var(--profile-primary) 85%,transparent),color-mix(in srgb,var(--profile-secondary) 78%,transparent));border:1px solid var(--profile-number);border-radius:5px;box-shadow:0 0 8px color-mix(in srgb,var(--profile-number) 45%,transparent)}
+.leaderboard-entry-selected .leaderboard-number{color:var(--profile-number);text-shadow:0 0 6px color-mix(in srgb,var(--profile-number) 85%,transparent)}
+.race-ticker-stage{opacity:var(--overlay-opacity,1)}
+.overlay-animations-off,.overlay-animations-off::before,.overlay-animations-off::after,.overlay-animations-off *,.overlay-animations-off *::before,.overlay-animations-off *::after{animation:none!important;transition:none!important}
