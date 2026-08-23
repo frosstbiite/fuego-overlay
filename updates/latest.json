@@ -3,12 +3,12 @@
   "product": "Fuego Overlay",
   "version": "1.1.2",
   "minimumUpdaterVersion": "1.1.1",
-  "requiresInstaller": false,
-  "notes": "Fuego Classic layout update: independent Heart Rate and Track Map toggles, auto-width optional sections, and improved speed gauge alignment.",
+  "requiresInstaller": true,
+  "notes": "Fuego Overlay v1.1.2 requires a full installer because v1.1.1 cannot safely patch app.asar directly. This build fixes that updater path for future patch releases.",
   "releaseUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.2",
-  "patchUrl": "https://github.com/frosstbiite/fuego-overlay/releases/download/v1.1.2/Fuego-Patch-1.1.2.zip",
-  "patchSha256": "1452c32288ec414eef1d5856a300fb435dba0aa03adfe84bd93b27b0f1848854",
-  "manifestUrl": "https://github.com/frosstbiite/fuego-overlay/releases/download/v1.1.2/Fuego-Patch-1.1.2-manifest.json",
-  "manifestSha256": "aa72dc777b0b0af22fa0e647713ec786fecdab2c969ae1d7163fa5edd7c533be",
+  "patchUrl": "",
+  "patchSha256": "",
+  "manifestUrl": "",
+  "manifestSha256": "",
   "installerUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.2"
 }
