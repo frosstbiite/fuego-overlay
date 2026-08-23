@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "product": "Fuego Overlay",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "minimumUpdaterVersion": "1.1.1",
-  "requiresInstaller": true,
-  "notes": "First Fuego build with the in-app patch updater. Install v1.1.1 once; future maintenance updates can be installed inside Fuego.",
-  "releaseUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.1",
-  "patchUrl": "",
-  "patchSha256": "",
-  "manifestUrl": "",
-  "manifestSha256": "",
-  "installerUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.1"
+  "requiresInstaller": false,
+  "notes": "Fuego Classic layout update: independent Heart Rate and Track Map toggles, auto-width optional sections, and improved speed gauge alignment.",
+  "releaseUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.2",
+  "patchUrl": "https://github.com/frosstbiite/fuego-overlay/releases/download/v1.1.2/Fuego-Patch-1.1.2.zip",
+  "patchSha256": "1452C32288EC414EEF1D5856A300FB435DBA0AA03ADFE84BD93B27B0F1848854",
+  "manifestUrl": "https://github.com/frosstbiite/fuego-overlay/releases/download/v1.1.2/Fuego-Patch-1.1.2-manifest.json",
+  "manifestSha256": "AA72DC777B0B0AF22FA0E647713EC786FECDAB2C969AE1D7163FA5EDD7C533BE",
+  "installerUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.2"
 }
