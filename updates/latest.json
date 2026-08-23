@@ -7,8 +7,8 @@
   "notes": "Fuego Classic layout update: independent Heart Rate and Track Map toggles, auto-width optional sections, and improved speed gauge alignment.",
   "releaseUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.2",
   "patchUrl": "https://github.com/frosstbiite/fuego-overlay/releases/download/v1.1.2/Fuego-Patch-1.1.2.zip",
-  "patchSha256": "1452C32288EC414EEF1D5856A300FB435DBA0AA03ADFE84BD93B27B0F1848854",
+  "patchSha256": "1452c32288ec414eef1d5856a300fb435dba0aa03adfe84bd93b27b0f1848854",
   "manifestUrl": "https://github.com/frosstbiite/fuego-overlay/releases/download/v1.1.2/Fuego-Patch-1.1.2-manifest.json",
-  "manifestSha256": "AA72DC777B0B0AF22FA0E647713EC786FECDAB2C969AE1D7163FA5EDD7C533BE",
+  "manifestSha256": "aa72dc777b0b0af22fa0e647713ec786fecdab2c969ae1d7163fa5edd7c533be",
   "installerUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.2"
 }
