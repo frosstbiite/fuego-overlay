@@ -5,10 +5,10 @@
   "minimumUpdaterVersion": "1.1.2",
   "requiresInstaller": false,
   "notes": "Fuego Classic hotfix: fixes Track Map width when using a driver profile without a sponsor logo.",
-  "releaseUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.3",
-  "patchUrl": "https://github.com/frosstbiite/fuego-overlay/releases/download/v1.1.3/Fuego-Patch-1.1.3.zip",
+  "releaseUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.3HotFix",
+  "patchUrl": "https://github.com/frosstbiite/fuego-overlay/releases/download/v1.1.3HotFix/Fuego-Patch-1.1.3.zip",
   "patchSha256": "eaa460ce563aa14e173651300ade0be4b23ad8e490ad55f5ac079a5c0b5fa28c",
-  "manifestUrl": "https://github.com/frosstbiite/fuego-overlay/releases/download/v1.1.3/Fuego-Patch-1.1.3-manifest.json",
+  "manifestUrl": "https://github.com/frosstbiite/fuego-overlay/releases/download/v1.1.3HotFix/Fuego-Patch-1.1.3-manifest.json",
   "manifestSha256": "c6c5794d16cc2a79e2d1250a2990114b8791e259cf75ddf13d78e0136e818371",
-  "installerUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.3"
+  "installerUrl": "https://github.com/frosstbiite/fuego-overlay/releases/tag/v1.1.3HotFix"
 }
